@@ -1,0 +1,15 @@
+{
+  "name": "TriangleTwist",
+  "version": "0.0.0",
+  "homepage": "https://github.com/MaksTsk/TriangleTwist",
+  "authors": [
+    "Maxim Murygin <muriginm@gmail.com>"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
