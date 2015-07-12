@@ -26,8 +26,10 @@ window.onload = function init()
         vec2(  1, -1 )
     ];
 
+    console.log('start deviding');
     divideTriangle( vertices[0], vertices[1], vertices[2],
                     NumTimesToSubdivide);
+    console.log('stop deviding');
 
     //
     //  Configure WebGL
