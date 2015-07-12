@@ -11,10 +11,18 @@
 	<script type="text/javascript" src="common/MV.js"></script>
 
 	<script id="vertex-shader" type="x-shader/x-vertex">
+
+		const float M_PI = 3.1415926535897932384626433832795;
+
 		attribute vec4 vPosition;
+
 		void main()
 		{
-		    gl_Position = vPosition;
+			float angle= 0.0;
+			float rotationAngle = angle / (2. * M_PI);
+			float x = vPosition.x * cos(rotationAngle) - vPosition.y * sin(rotationAngle);
+			float y = vPosition.x * sin(rotationAngle) + vPosition.y * cos(rotationAngle);
+		    gl_Position = vec4(x, y, 0, 1);
 		}
 	</script>
 

@@ -113,5 +113,4 @@ function render()
     for (var i=0; i<points.length; i+=3) {
         gl.drawArrays( gl.LINE_LOOP, i, 3);
     }  
-   // gl.drawArrays( gl.TRIANGLES, 0, points.length);
 }
