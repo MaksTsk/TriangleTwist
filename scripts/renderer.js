@@ -6,17 +6,37 @@ var gl;
 var points;
 var bufferId;
 var vPosition;
-var vertices
+var uAngle;
+var vertices;
+var numTimesToDivide = 5;
+var angle = 0;
 
 $(document).ready(function (){
     init();
     $('#power-slider').change(powerSliderChanged);
+    $('#angle-slider').change(onAngleSliderChanged);
 });
 
-function powerSliderChanged () {
-    var numTimesToDivide = parseInt($(this).val());
+function onAngleSliderChanged () {
+    var sliderValue = parseFloat($(this).val());
 
-    updateTrianglesBuffer(numTimesToDivide);
+    angle = sliderValue * Math.PI / 180;;
+
+    console.log(sliderValue);
+    console.log(angle);
+    updateAngleOnShader();
+
+    render();
+}
+
+function updateAngleOnShader () {
+    gl.uniform1f(uAngle, angle);
+}
+
+function powerSliderChanged () {
+    numTimesToDivide = parseInt($(this).val());
+
+    updateTrianglesBuffer();
 
     render();
 }
@@ -51,17 +71,20 @@ function init () {
     gl.useProgram( program );
 
     vPosition = gl.getAttribLocation( program, "vPosition" );
+    uAngle = gl.getUniformLocation(program, 'uAngle');
+
+    console.log(uAngle);
 
     // Load the data into the GPU
 
     bufferId = gl.createBuffer();
 
-    updateTrianglesBuffer(5);
+    updateTrianglesBuffer();
 
     render();
 };
 
-function updateTrianglesBuffer (numTimesToDivide) {     
+function updateTrianglesBuffer () {     
     points = [];
 
     divideTriangle( vertices[0], vertices[1], vertices[2],

@@ -12,16 +12,15 @@
 
 	<script id="vertex-shader" type="x-shader/x-vertex">
 
-		const float M_PI = 3.1415926535897932384626433832795;
-
 		attribute vec4 vPosition;
+
+		uniform float uAngle;
 
 		void main()
 		{
-			float angle= 0.0;
-			float rotationAngle = angle / (2. * M_PI);
-			float x = vPosition.x * cos(rotationAngle) - vPosition.y * sin(rotationAngle);
-			float y = vPosition.x * sin(rotationAngle) + vPosition.y * cos(rotationAngle);
+			float x = vPosition.x * cos(uAngle) - vPosition.y * sin(uAngle);
+			float y = vPosition.x * sin(uAngle) + vPosition.y * cos(uAngle);
+
 		    gl_Position = vec4(x, y, 0, 1);
 		}
 	</script>
@@ -43,7 +42,7 @@
 		</div>
 		<div class='row'>
 			<label class="slider-label">Angle:</label>
-			<input class='slider' type="range" id='angle-slider'>
+			<input class='slider' type="range" id='angle-slider' min='0' max='360' step='10' value='0'>
 		</div>
 		<div class="row">
 			<canvas id="gl-canvas" width="512" height="512">
