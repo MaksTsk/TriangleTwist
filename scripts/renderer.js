@@ -1,21 +1,36 @@
 "use strict";
 
+var ShapeType = {
+    TRIANGLE: 'triangle',
+    SQUARE: 'square'
+};
+
 var canvas;
 var gl;
 
 var points;
 var bufferId;
+
 var vPosition;
 var uAngle;
-var vertices;
+
 var numTimesToDivide = 5;
 var angle = 0;
+var currentShapeType = ShapeType.TRIANGLE;
 
 $(document).ready(function (){
     init();
     $('#power-slider').change(powerSliderChanged);
     $('#angle-slider').change(onAngleSliderChanged);
+    $('#shape-type').change(onShapeTypeChanged);
 });
+
+function onShapeTypeChanged () {
+    currentShapeType = $(this).val();
+
+    updateTrianglesBuffer();
+    render();
+}
 
 function onAngleSliderChanged () {
     var sliderValue = parseFloat($(this).val());
@@ -51,17 +66,6 @@ function init () {
     //  Initialize our data for the Sierpinski Gasket
     //
 
-    // First, initialize the corners of our gasket with three points.
-
-    vertices = [
-        vec2( 0, 1 ),
-        vec2(  -0.5, - Math.sqrt(3)/2),
-        vec2(  0.5, - Math.sqrt(3)/2 )
-        // vec2(0,1),
-        // vec2(-1,-1),
-        // vec2(1, -1)
-    ];
-
     //
     //  Configure WebGL
     //
@@ -87,11 +91,49 @@ function init () {
     render();
 };
 
-function updateTrianglesBuffer () {     
+function getVertexiesByShapeType (shapeType) {
+    switch(shapeType){
+        case ShapeType.TRIANGLE:
+            return [
+                vec2( 0, 1 ),
+                vec2(  -0.5, - Math.sqrt(3)/2),
+                vec2(  0.5, - Math.sqrt(3)/2 )
+            ];
+        case ShapeType.SQUARE:
+            return [
+                vec2(-0.5,-0.5),
+                vec2(-0.5, 0.5),
+                vec2(0.5, 0.5),
+                vec2(0.5, -0.5)
+            ];
+        default: 
+            throw ('Unknown shape type');
+    }
+}
+
+function divideShape (vertices, shapeType) {
+    switch(shapeType){
+        case ShapeType.TRIANGLE:
+            divideTriangle( vertices[0], vertices[1], vertices[2],
+                   numTimesToDivide);
+            break;
+        case ShapeType.SQUARE:
+            divideTriangle( vertices[0], vertices[1], vertices[2],
+                   numTimesToDivide);
+            divideTriangle( vertices[0], vertices[2], vertices[3],
+                   numTimesToDivide);
+            break;
+        default: 
+            throw ('Unknown shape type');
+    }
+}
+
+function updateTrianglesBuffer () {   
     points = [];
 
-    divideTriangle( vertices[0], vertices[1], vertices[2],
-                   numTimesToDivide);
+    var vertices = getVertexiesByShapeType(currentShapeType);
+
+    divideShape(vertices, currentShapeType);
 
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
 
