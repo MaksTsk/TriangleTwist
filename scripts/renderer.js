@@ -127,6 +127,7 @@ function divideTriangle( a, b, c, count )
         divideTriangle( a, ab, ac, count );
         divideTriangle( c, ac, bc, count );
         divideTriangle( b, bc, ab, count );
+        divideTriangle( ab, bc, ac, count);
     }
 }
 
