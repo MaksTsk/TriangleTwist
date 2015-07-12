@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<title>Triangle Twist</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src='scripts/renderer.js'></script>
+	<script type="text/javascript" src="common/webgl-utils.js"></script>
+	<script type="text/javascript" src="common/initShaders.js"></script>
+	<script type="text/javascript" src="common/MV.js"></script>
+
+	<script id="vertex-shader" type="x-shader/x-vertex">
+
+		attribute vec4 vPosition;
+
+		uniform float uAngle;
+
+		float getDeltaMultiplies(float x, float y){
+			return sqrt(pow(x,2.) + pow(y,2.));
+		}
+
+		void main()
+		{
+			float delta = getDeltaMultiplies(vPosition.x, vPosition.y);
+			float angle = delta * uAngle;
+
+			float x = vPosition.x * cos(angle) - vPosition.y * sin(angle);
+			float y = vPosition.x * sin(angle) + vPosition.y * cos(angle);
+
+		    gl_Position = vec4(x, y, 0, 1);
+		}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		void main()
+		{
+		    gl_FragColor = vec4( 1.0, 0.4, 0, 1.0 );
+		}
+	</script>
+
+</head>
+<body>
+	<div class='table'>
+		<div class='row'>
+			<label class="slider-label">Subdivision Power:</label>
+			<input class='slider' type="range" id='power-slider' min='0' max='10' step='1'>
+		</div>
+		<div class='row'>
+			<label class="slider-label">Angle:</label>
+			<input class='slider' type="range" id='angle-slider' min='0' max='360' step='10' value='0'>
+		</div>
+		<div class='row'>
+			<label class="slider-label">Shape:</label>
+			<select id="shape-type">
+				<option value="triangle">triangle</option>
+				<option value="square">square</option>
+			</select>
+		</div>
+		<div class="row">
+			<canvas id="gl-canvas" width="512" height="512">
+				Oops ... your browser doesn't support the HTML5 canvas element
+			</canvas>
+		</div>
+	</div>
+</body>
+</html>
