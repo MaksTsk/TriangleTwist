@@ -3,12 +3,25 @@
 var canvas;
 var gl;
 
-var points = [];
+var points;
+var bufferId;
+var vPosition;
+var vertices
 
-var NumTimesToSubdivide = 5;
+$(document).ready(function (){
+    init();
+    $('#power-slider').change(powerSliderChanged);
+});
 
-window.onload = function init()
-{
+function powerSliderChanged () {
+    var numTimesToDivide = $(this).val();
+
+    updateTrianglesBuffer(numTimesToDivide);
+
+    render();
+}
+
+function init () {
     canvas = document.getElementById( "gl-canvas" );
 
     gl = WebGLUtils.setupWebGL( canvas );
@@ -20,16 +33,11 @@ window.onload = function init()
 
     // First, initialize the corners of our gasket with three points.
 
-    var vertices = [
+    vertices = [
         vec2( -1, -1 ),
         vec2(  0,  1 ),
         vec2(  1, -1 )
     ];
-
-    console.log('start deviding');
-    divideTriangle( vertices[0], vertices[1], vertices[2],
-                    NumTimesToSubdivide);
-    console.log('stop deviding');
 
     //
     //  Configure WebGL
@@ -42,20 +50,37 @@ window.onload = function init()
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
+    vPosition = gl.getAttribLocation( program, "vPosition" );
+
     // Load the data into the GPU
 
-    var bufferId = gl.createBuffer();
+    bufferId = gl.createBuffer();
+
+    updateTrianglesBuffer(5);
+
+    render();
+};
+
+function updateTrianglesBuffer (numTimesToDivide) {     
+    points = [];
+
+    if(numTimesToDivide == 0){
+        points = vertices;
+    }
+    else{
+        divideTriangle( vertices[0], vertices[1], vertices[2],
+                    numTimesToDivide);
+    }
+
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
+
     gl.bufferData( gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW );
 
     // Associate out shader variables with our data buffer
 
-    var vPosition = gl.getAttribLocation( program, "vPosition" );
     gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vPosition );
-
-    render();
-};
+}
 
 function triangle( a, b, c )
 {
