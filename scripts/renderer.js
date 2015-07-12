@@ -14,7 +14,7 @@ $(document).ready(function (){
 });
 
 function powerSliderChanged () {
-    var numTimesToDivide = $(this).val();
+    var numTimesToDivide = parseInt($(this).val());
 
     updateTrianglesBuffer(numTimesToDivide);
 
@@ -64,13 +64,8 @@ function init () {
 function updateTrianglesBuffer (numTimesToDivide) {     
     points = [];
 
-    if(numTimesToDivide == 0){
-        points = vertices;
-    }
-    else{
-        divideTriangle( vertices[0], vertices[1], vertices[2],
-                    numTimesToDivide);
-    }
+    divideTriangle( vertices[0], vertices[1], vertices[2],
+                   numTimesToDivide);
 
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferId );
 
@@ -89,10 +84,9 @@ function triangle( a, b, c )
 
 function divideTriangle( a, b, c, count )
 {
-
     // check for end of recursion
 
-    if ( count === 0 ) {
+    if ( count == 0 ) {
         triangle( a, b, c );
     }
     else {
@@ -116,5 +110,5 @@ function divideTriangle( a, b, c, count )
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT );
-    gl.drawArrays( gl.TRIANGLES, 0, points.length );
+    gl.drawArrays( gl.TRIANGLES, 0, points.length);
 }
