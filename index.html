@@ -16,10 +16,17 @@
 
 		uniform float uAngle;
 
+		float getDeltaMultiplies(float x, float y){
+			return sqrt(pow(x,2.) + pow(y,2.));
+		}
+
 		void main()
 		{
-			float x = vPosition.x * cos(uAngle) - vPosition.y * sin(uAngle);
-			float y = vPosition.x * sin(uAngle) + vPosition.y * cos(uAngle);
+			float delta = getDeltaMultiplies(vPosition.x, vPosition.y);
+			float angle = delta * uAngle;
+
+			float x = vPosition.x * cos(angle) - vPosition.y * sin(angle);
+			float y = vPosition.x * sin(angle) + vPosition.y * cos(angle);
 
 		    gl_Position = vec4(x, y, 0, 1);
 		}
