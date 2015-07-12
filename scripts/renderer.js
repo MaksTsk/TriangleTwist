@@ -57,6 +57,9 @@ function init () {
         vec2( 0, 1 ),
         vec2(  -0.5, - Math.sqrt(3)/2),
         vec2(  0.5, - Math.sqrt(3)/2 )
+        // vec2(0,1),
+        // vec2(-1,-1),
+        // vec2(1, -1)
     ];
 
     //
