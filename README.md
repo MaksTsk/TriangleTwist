@@ -1,12 +1,13 @@
 # Triangle Twist Exercise
 
-## Getting Started
+### Life Demo
+http://m-murygin.github.io/triangle-twist/
+
+### Getting Started
 ```
 bower install
 ```
 
-## Life Demo
-http://m-murygin.github.io/triangle-twist/
-
-### Technologies
+#### Technologies
 1. WebGL
+2. Javascript
